@@ -1,10 +1,13 @@
 import { useState } from "react"; 
 import PropTypes from 'prop-types';
 import { Label, Form, Input, Button } from './BookContacts.styled';
+import { useDispatch  } from "react-redux/es/exports";
+import { update } from '../../redux/contactsState';
 
-export const AddContscts = ({onSubmit}) => {
+export const AddContscts = () => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
+    const dispatch = useDispatch();
 
     const onInputChangeName = (e) => {
         setName(e.target.value);
@@ -14,8 +17,8 @@ export const AddContscts = ({onSubmit}) => {
       }
     const onSubmitContact = (e) => {
         e.preventDefault();
-        
-        onSubmit({name, number});
+
+        dispatch(update(name, number));
         reset();
       }
     const reset = () => {

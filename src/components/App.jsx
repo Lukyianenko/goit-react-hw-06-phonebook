@@ -1,50 +1,17 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux/es/exports";
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 import {AddContscts} from './BookContacts/AddContact';
 import { ListContacts } from './BookContacts/ListContacts';
 import { Filter } from './BookContacts/FilterContacts';
 import { Title } from './BookContacts/BookContacts.styled';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filtr, setFiltr] = useState('');
-
-  const onSubmitAddNewContact = (contact) => {
-    const includesName = contacts.map(item => {return (item.name.toLowerCase())});
-    if(includesName.includes(contact.name.toLowerCase())) {
-      alert(`${contact.name} is already in contacts`)
-    }  
-    else {
-      const id = nanoid();
-      setContacts([...contacts, {id, ...contact}])
-    }
-  }
-  const onChangeFiltr = (e) => {
-    setFiltr(e.target.value);
-  }
-  const onDeleteContact = (contactId) => {
-    setContacts(contacts => contacts.filter(contact => contact.id !== contactId));
-  }
+  const contacts = useSelector(state => state.contact.contacts);
 
   useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts))
+    localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
-
-  useEffect(() => {
-    const savedContacts = localStorage.getItem('contacts');
-
-    if(savedContacts !== null) {
-      const parsedContacts = JSON.parse(savedContacts);
-      setContacts(parsedContacts);
-      return
-    }
-    setContacts([]);
-  }, [])
-
-    const normalizeFiltr = filtr.toLowerCase();
-
-    const visibleContacts = contacts.filter(contact => contact.name.toLowerCase().includes(normalizeFiltr));
 
     return (
       <div
@@ -59,11 +26,9 @@ export const App = () => {
         }}
       >
         <Title>Phonebook</Title>
-      <AddContscts onSubmit={onSubmitAddNewContact} />
-      <Filter value={filtr} onChange={onChangeFiltr}/>
-      <ListContacts contacts={visibleContacts} onDelete={onDeleteContact}/>
-      
-
+      <AddContscts />
+      <Filter/>
+      <ListContacts/>
       </div>
     );  
 };
@@ -76,6 +41,5 @@ App.propTypes = {
       name: PropTypes.string,
       number: PropTypes.string,
     })),
-    filtr: PropTypes.string,
   })),
 }
