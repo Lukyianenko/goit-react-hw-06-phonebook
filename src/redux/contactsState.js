@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from 'nanoid';
 
-const init = () => {
-  const savedContacts = localStorage.getItem('contacts');
+// const init = () => {
+//   const savedContacts = localStorage.getItem('contacts');
   
-  if(savedContacts !== null) {
-    const parsedContacts = JSON.parse(savedContacts);
-    return parsedContacts;
-  } else {
-    return [];
-  }
-}
+//   if(savedContacts !== null) {
+//     const parsedContacts = JSON.parse(savedContacts);
+//     return parsedContacts;
+//   } else {
+//     return [];
+//   }
+// }
 
 const initialState = {
-    contacts: init(),
+    contacts: [],
     filter: ""
   };
 
@@ -48,7 +48,6 @@ export const contactsState = createSlice({
           onFilter: (state, action) => {
             state.filter = action.payload;
           }
-            
           }
         })
 
